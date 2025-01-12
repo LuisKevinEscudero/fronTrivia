@@ -1,0 +1,23 @@
+/* Estilos para la barra de navegación */
+.nav-bar {
+    display: flex;
+    justify-content: flex-end; /* Alinea el contenido a la derecha */
+    padding: 10px 20px; /* Espaciado en la parte superior e inferior */
+    background-color: #333; /* Fondo oscuro */
+  }
+  
+  .boton-iniciar-sesion {
+    background-color: #4CAF50; /* Color verde para el botón */
+    color: white; /* Texto blanco */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .boton-iniciar-sesion:hover {
+    background-color: #45a049; /* Cambia el color al pasar el ratón */
+  }
+  

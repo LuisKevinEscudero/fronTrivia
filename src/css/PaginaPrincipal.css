@@ -1,0 +1,32 @@
+/* Contenedor principal */
+.contenedor-principal {
+  padding-top: 70px; /* Espacio entre el nav y el contenido principal */
+  text-align: center;
+}
+
+/* Logo */
+.contenedor-logo {
+  margin-bottom: 20px; /* Espacio debajo del logo */
+}
+
+.logo {
+  width: 150px; /* Tamaño del logo */
+  height: auto;
+}
+
+/* Mensaje de bienvenida */
+.mensaje-bienvenida {
+  margin-top: 20px;
+}
+
+.mensaje-bienvenida h1 {
+  font-size: 2.5rem; /* Tamaño grande para el título */
+  color: #4CAF50; /* Verde para el título */
+  margin-bottom: 10px;
+}
+
+.mensaje-bienvenida p {
+  font-size: 1.2rem; /* Tamaño un poco más pequeño para el párrafo */
+  color: #333; /* Color oscuro para el texto */
+  margin-top: 0;
+}
