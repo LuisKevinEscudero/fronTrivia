@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import IniciarSesion from "./IniciarSesion";
+import Registro from "./Registro"; // Importamos el componente de registro
 import "../css/Nav.css";
 
 const Nav = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false); // Estado para mostrar el registro
   const [userInfo, setUserInfo] = useState(null); // Guardar la información del usuario
 
   // Verifica si hay un token válido en localStorage al cargar la página
@@ -47,18 +49,44 @@ const Nav = () => {
     setUserInfo(null); // Limpiar el estado del usuario
   };
 
+  const handleCloseModals = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+    document.body.style.overflow = "auto"; // Permitir el desplazamiento del body
+  };
+
+  const openLoginModal = () => {
+    setShowLogin(true);
+    setShowRegister(false);
+    document.body.style.overflow = "hidden"; // Evitar que se desplace el body
+  };
+
+  const openRegisterModal = () => {
+    setShowRegister(true);
+    setShowLogin(false);
+    document.body.style.overflow = "hidden"; // Evitar que se desplace el body
+  };
+
   return (
     <nav className="nav-bar">
       {!userInfo ? (
-        <button
-          className="boton-iniciar-sesion"
-          onClick={() => setShowLogin(true)}
-        >
-          Iniciar Sesión
-        </button>
+        <>
+          <button
+            className="boton-iniciar-sesion"
+            onClick={openLoginModal}
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            className="boton-registrarse"
+            onClick={openRegisterModal} // Abre el modal de registro
+          >
+            Registrarse
+          </button>
+        </>
       ) : (
         <>
-          <p>Bienvenido, {userInfo.name}</p> {/* Mostramos el nombre del usuario */}
+          <span className="nombre-usuario">{userInfo.name}</span> {/* Mostramos el nombre del usuario */}
           <button className="boton-cerrar-sesion" onClick={handleLogout}>
             Cerrar Sesión
           </button>
@@ -66,15 +94,29 @@ const Nav = () => {
       )}
 
       {showLogin && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-overlay" onClick={handleCloseModals}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button
               className="cerrar-modal"
-              onClick={() => setShowLogin(false)}
+              onClick={handleCloseModals}
             >
               ×
             </button>
-            <IniciarSesion onLoginSuccess={handleLoginSuccess} onClose={() => setShowLogin(false)} />
+            <IniciarSesion onLoginSuccess={handleLoginSuccess} onClose={handleCloseModals} />
+          </div>
+        </div>
+      )}
+
+      {showRegister && (
+        <div className="modal-overlay" onClick={handleCloseModals}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="cerrar-modal"
+              onClick={handleCloseModals}
+            >
+              ×
+            </button>
+            <Registro onClose={handleCloseModals} />
           </div>
         </div>
       )}

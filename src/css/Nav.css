@@ -1,55 +1,102 @@
 /* Estilos para la barra de navegación */
 .nav-bar {
-    display: flex;
-    justify-content: flex-end; /* Alinea el contenido a la derecha */
-    padding: 10px 20px; /* Espaciado en la parte superior e inferior */
-    background-color: #333; /* Fondo oscuro */
-  }
-  
-  .boton-iniciar-sesion {
-    background-color: #4CAF50; /* Color verde para el botón */
-    color: white; /* Texto blanco */
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  .boton-iniciar-sesion:hover {
-    background-color: #45a049; /* Cambia el color al pasar el ratón */
-  }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Asegura que el modal esté por encima de otros elementos */
-  }
-  
-  .modal-content {
-    background: white; /* Fondo del popup */
-    padding: 20px; /* Espaciado interno */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para resaltar */
-    position: relative; /* Posicionamiento relativo para el botón de cierre */
-  }
-  
-  .cerrar-modal {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1.5em; /* Tamaño del botón de cierre */
-    cursor: pointer;
-  }
-  
-  
+  display: flex;
+  justify-content: flex-end; /* Alinea el contenido a la derecha */
+  padding: 10px 20px; /* Espaciado en la parte superior e inferior */
+  background-color: #333; /* Fondo oscuro */
+}
+
+.boton-iniciar-sesion,
+.boton-registrarse {
+  margin-left: 15px; /* Aumentamos el espacio entre los botones */
+}
+
+.boton-iniciar-sesion {
+  background-color: #4CAF50; /* Color verde para el botón */
+  color: white; /* Texto blanco */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.boton-iniciar-sesion:hover {
+  background-color: #45a049; /* Cambia el color al pasar el ratón */
+}
+
+.boton-registrarse {
+  margin-left: 15px; /* Aumentamos el espacio entre los botones */
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.boton-registrarse:hover {
+  background-color: #218838;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que el modal esté por encima de otros elementos */
+}
+
+.modal-content {
+  background: white; /* Fondo del popup */
+  padding: 20px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para resaltar */
+  position: relative; /* Posicionamiento relativo para el botón de cierre */
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em; /* Tamaño del botón de cierre */
+  cursor: pointer;
+}
+
+.boton-cerrar-sesion {
+  background-color: #f44336; /* Rojo para cerrar sesión */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.boton-cerrar-sesion:hover {
+  background-color: #e53935;
+}
+
+/* Estilo para el nombre del usuario */
+.nombre-usuario {
+  font-size: 24px; /* Aumentamos el tamaño de la fuente */
+  color: white; /* Color blanco para que destaque sobre el fondo oscuro */
+  font-weight: bold; /* Hacemos que el nombre se vea más destacado */
+  margin-right: 20px; /* Distancia entre el nombre y el botón de cerrar sesión */
+  padding: 10px 15px; /* Agregamos padding para el recuadro */
+  border: 2px solid #fff; /* Borde blanco alrededor del nombre */
+  border-radius: 5px; /* Bordes redondeados para el recuadro */
+  background-color: rgba(255, 255, 255, 0.2); /* Fondo semitransparente */
+  display: flex;
+  align-items: center; /* Centrado vertical del nombre */
+  justify-content: center; /* Centrado horizontal del nombre */
+  height: 40px; /* Aseguramos que el nombre tenga suficiente altura */
+}
