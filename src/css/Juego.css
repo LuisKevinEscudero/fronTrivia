@@ -1,0 +1,72 @@
+.contenedor-juego {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.juego-en-curso {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.preguntas {
+  margin-top: 20px;
+}
+
+.pregunta {
+  margin-bottom: 20px;
+}
+
+.pregunta h3 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.opciones {
+  margin-top: 10px;
+}
+
+.opciones button {
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.opciones button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: -10px;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+p {
+  font-size: 1rem;
+  color: #333;
+}
+
+.puntuacion {
+  font-size: 1.2rem;
+  color: #4CAF50;
+}
+
+.estado {
+  font-size: 1rem;
+  color: #FF5733;
+}

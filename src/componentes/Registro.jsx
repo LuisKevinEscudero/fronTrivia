@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "../css/Registro.css";
 
-const RegistroUsuario = ({ onClose }) => {
+const RegistroUsuario = ({ onClose, onRegisterSuccess }) => {
   const [formData, setFormData] = useState({
     nombreUsuario: "",
     email: "",
     password: "",
-    tipoCuenta: "TRADICIONAL",
+    tipoCuenta: "TRADICIONAL", // Siempre es "Tradicional"
   });
 
   const [error, setError] = useState("");
@@ -40,8 +40,14 @@ const RegistroUsuario = ({ onClose }) => {
           nombreUsuario: "",
           email: "",
           password: "",
-          tipoCuenta: "TRADICIONAL",
+          tipoCuenta: "TRADICIONAL", // Mantiene siempre el tipo de cuenta como "Tradicional"
         });
+        
+        // Llamamos a la función para cerrar el modal de registro y abrir el de iniciar sesión
+        setTimeout(() => {
+          onClose(); // Cierra el modal de registro
+          onRegisterSuccess(); // Llama a la función para abrir el modal de iniciar sesión
+        }, 1000); // Espera 1 segundo para que el mensaje de éxito sea visible
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Error al registrar el usuario.");
@@ -98,18 +104,7 @@ const RegistroUsuario = ({ onClose }) => {
               required
             />
           </div>
-          <div>
-            <label htmlFor="tipoCuenta">Tipo de Cuenta:</label>
-            <select
-              id="tipoCuenta"
-              name="tipoCuenta"
-              value={formData.tipoCuenta}
-              onChange={handleChange}
-            >
-              <option value="TRADICIONAL">Tradicional</option>
-              <option value="GOOGLE">Google</option>
-            </select>
-          </div>
+          {/* El tipo de cuenta está predefinido como "Tradicional", por lo que no se necesita el select */}
           {error && <p className="error">{error}</p>}
           {success && <p className="success">Usuario registrado con éxito.</p>}
           <button type="submit">Registrar</button>

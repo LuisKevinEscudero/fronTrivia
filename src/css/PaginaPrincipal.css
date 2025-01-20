@@ -30,3 +30,48 @@
   color: #333; /* Color oscuro para el texto */
   margin-top: 0;
 }
+
+/* Estilos de la página principal */
+.contenedor-principal {
+  text-align: center;
+  padding: 40px;
+}
+
+.contenedor-logo {
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.mensaje-bienvenida {
+  margin-bottom: 40px;
+}
+
+.boton-iniciar-juego {
+  margin-top: 20px;
+}
+
+/* Estilo del botón de comenzar juego */
+.boton-comenzar {
+  padding: 15px 30px;               /* Espaciado interno */
+  font-size: 18px;                  /* Tamaño de fuente */
+  background-color: #4CAF50;        /* Color verde */
+  color: white;                     /* Color de texto blanco */
+  border: none;                     /* Sin borde */
+  border-radius: 5px;               /* Bordes redondeados */
+  cursor: pointer;                 /* Cursor de puntero */
+  transition: background-color 0.3s; /* Transición suave para el color */
+}
+
+/* Cambio de color al pasar el cursor sobre el botón */
+.boton-comenzar:hover {
+  background-color: #45a049;        /* Color verde más oscuro */
+}
+
+/* Estilo para cuando el botón tiene el foco */
+.boton-comenzar:focus {
+  outline: none;                    /* Quitar el contorno cuando el botón está enfocado */
+}

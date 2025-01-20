@@ -3,7 +3,7 @@ import IniciarSesion from "./IniciarSesion";
 import Registro from "./Registro"; // Importamos el componente de registro
 import "../css/Nav.css";
 
-const Nav = () => {
+const Nav = ({ onLoginSuccess }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false); // Estado para mostrar el registro
   const [userInfo, setUserInfo] = useState(null); // Guardar la información del usuario
@@ -18,12 +18,19 @@ const Nav = () => {
     // Verificamos si el token no ha expirado y si el userId y userName existen
     if (token && userId && userName && expirationTime && new Date().getTime() < expirationTime) {
       console.log("Token y UserName recuperados correctamente", token, userName);
-      setUserInfo({ id: userId, name: userName, token });
+      if (!userInfo || userInfo.id !== userId) { // Solo actualizar si el usuario es diferente
+        setUserInfo({ id: userId, name: userName, token });
+        if (onLoginSuccess) {
+          onLoginSuccess(userName); // Llamamos al callback para propagar el nombre de usuario
+        }
+      }
     } else {
       console.log("Token o UserName no válidos, limpiando la sesión");
-      setUserInfo(null); // Si no hay token o el token ha expirado, limpiar el estado
+      if (userInfo) {
+        setUserInfo(null); // Limpiar el estado si el token es inválido
+      }
     }
-  }, []);
+  }, [userInfo, onLoginSuccess]); // Asegúrate de que 'userInfo' sea parte de las dependencias
 
   const handleLoginSuccess = (data) => {
     console.log("Inicio de sesión exitoso:", data);
@@ -38,6 +45,9 @@ const Nav = () => {
     setUserInfo({ id: data.usuarioId, name: data.nombreUsuario, token: data.token });
 
     setShowLogin(false); // Cerrar el modal de login
+    if (onLoginSuccess) {
+      onLoginSuccess(data.nombreUsuario); // Pasar el nombre de usuario a la página principal
+    }
   };
 
   const handleLogout = () => {
@@ -95,7 +105,7 @@ const Nav = () => {
 
       {showLogin && (
         <div className="modal-overlay" onClick={handleCloseModals}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} >
             <button
               className="cerrar-modal"
               onClick={handleCloseModals}

@@ -93,3 +93,24 @@ button:hover {
 .cerrar-modal:hover {
   color: #ff0000; 
 }
+
+/* Estilos adicionales para el checkbox de "Recordar usuario y contraseña" */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-container input {
+  width: auto;
+  margin-right: 5px;
+}
+
+.checkbox-container label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.checkbox-container input:checked {
+  border-color: #007bff;
+}
