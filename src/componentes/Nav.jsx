@@ -57,7 +57,11 @@ const Nav = ({ onLoginSuccess }) => {
     localStorage.removeItem("authUserName");
     localStorage.removeItem("authTokenExpiration");
     setUserInfo(null); // Limpiar el estado del usuario
+  
+    // Recargar la página
+    window.location.reload();
   };
+  
 
   const handleCloseModals = () => {
     setShowLogin(false);
