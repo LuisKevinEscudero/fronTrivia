@@ -1,72 +1,119 @@
+/* Contenedor principal del juego */
 .contenedor-juego {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 40px; /* Espaciado general */
+  text-align: center; /* Centrar contenido */
+  font-family: Arial, sans-serif; /* Fuente principal */
+  background-color: #f9f9f9; /* Fondo suave */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+  max-width: 900px; /* Limitar ancho máximo */
+  margin: 0 auto; /* Centrar en la página */
 }
 
-.juego-en-curso {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.preguntas {
-  margin-top: 20px;
-}
-
+/* Título de la pregunta */
 .pregunta {
-  margin-bottom: 20px;
+  margin: 20px 0;
+  font-size: 1.5rem; /* Tamaño del título */
+  font-weight: bold;
+  color: #333; /* Color oscuro */
 }
 
-.pregunta h3 {
+/* Mensajes de retroalimentación */
+.mensaje {
+  margin-top: 20px;
   font-size: 1.2rem;
-  color: #333;
+  font-weight: bold;
 }
 
-.opciones {
-  margin-top: 10px;
+.mensaje-correcto {
+  color: #4CAF50; /* Verde para correcto */
 }
 
-.opciones button {
-  padding: 10px 20px;
-  margin: 5px;
+.mensaje-incorrecto {
+  color: #FF5733; /* Rojo para incorrecto */
+}
+
+/* Contenedor de la puntuación */
+.puntuacion {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  color: #333; /* Texto oscuro */
+}
+
+/* Botón de continuar (o finalizar) */
+.boton-continuar {
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-size: 1rem;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s;
 }
 
-.opciones button:hover {
+/* Hover para el botón de continuar */
+.boton-continuar:hover {
   background-color: #0056b3;
-  transform: scale(1.05);
 }
 
-.error {
-  color: red;
-  font-size: 0.9em;
-  margin-top: -10px;
+/* Contenedor de opciones */
+.opciones {
+  display: flex; /* Disposición en línea */
+  flex-wrap: wrap; /* Permitir que los botones pasen a una nueva línea si es necesario */
+  justify-content: center; /* Centrar los botones horizontalmente */
+  gap: 20px; /* Espacio entre los botones (usamos gap para flex) */
+  margin-top: 20px; /* Espacio superior respecto a la pregunta */
+  width: 100%; /* Aseguramos que el contenedor ocupe el 100% del ancho */
+  padding: 0; /* Asegurarse de que no haya padding en el contenedor */
 }
 
-h3 {
-  font-size: 1.5rem;
-}
-
-h4 {
-  font-size: 1.2rem;
-  color: #555;
-}
-
-p {
+/* Botón de opción */
+.opciones button {
+  padding: 15px 30px; /* Tamaño de los botones */
   font-size: 1rem;
-  color: #333;
+  background-color: #007bff; /* Azul predeterminado */
+  color: white; /* Texto blanco */
+  border: none; /* Sin bordes */
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer; /* Manita al pasar el ratón */
+  transition: background-color 0.3s, transform 0.2s ease-in-out; /* Transiciones suaves */
+  margin: 0; /* Asegurarse de que no haya margin extra */
+  flex-grow: 0; /* Evitar que los botones se expandan */
+  max-width: 200px; /* Limitar el ancho máximo de los botones */
 }
 
-.puntuacion {
-  font-size: 1.2rem;
-  color: #4CAF50;
+/* Estilo al pasar el cursor por encima de un botón */
+.opciones button:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+  transform: translateY(-2px); /* Ligeramente hacia arriba */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más marcada */
 }
 
-.estado {
+/* Estilo para la opción seleccionada */
+.opcion-seleccionada {
+  background-color: #0056b3; /* Azul más destacado */
+  color: white;
+  border: 3px solid #003f8c; /* Borde más grueso y oscuro */
+  transform: scale(1.05); /* Agrandar ligeramente el botón */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Sombra más fuerte */
+}
+
+.boton-siguiente {
+  margin-top: 20px;
+  padding: 12px 25px;
   font-size: 1rem;
-  color: #FF5733;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
+
+/* Hover para el botón de continuar */
+.boton-siguiente:hover {
+  background-color: #0056b3;
+}
+
