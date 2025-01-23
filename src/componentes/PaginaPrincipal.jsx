@@ -15,7 +15,6 @@ const PaginaPrincipal = () => {
     const expirationTime = localStorage.getItem("authTokenExpiration");
     const userId = localStorage.getItem("authUserId");
     const userName = localStorage.getItem("authUserName");
-
     // Verifica si el token es válido
     if (token && userId && userName && expirationTime && new Date().getTime() < expirationTime) {
       setUserInfo({ id: userId, name: userName, token });
@@ -31,22 +30,23 @@ const PaginaPrincipal = () => {
 
   // Función para crear la partida
   const comenzarJuego = async () => {
-    if (!userInfo) return; // Si no hay usuario, no hacer nada
-
+    if (!userInfo) return;
+  
     setLoading(true);
     setError(null);
-
+  
     try {
       const response = await fetch("http://localhost:8080/api/partida/crear?nombreUsuario=" + userInfo.name, {
         method: "POST",
         headers: {
+          Authorization: userInfo.token, // Aquí va el token del usuario
           "Content-Type": "application/json",
         },
       });
-
+  
       const data = await response.json();
       if (response.ok) {
-        setPartida(data); // Almacena la partida en el estado
+        setPartida(data);
       } else {
         setError(data.message || "Error al crear la partida.");
       }
@@ -55,7 +55,7 @@ const PaginaPrincipal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   return (
     <div>
@@ -72,16 +72,22 @@ const PaginaPrincipal = () => {
           <h1>¡Bienvenido al Trivial de Videojuegos!</h1>
           <p>Demuestra cuánto sabes sobre videojuegos en este divertido juego de trivia.</p>
         </div>
-
+  
         {/* Mostrar el botón de comenzar juego solo si el usuario está logueado */}
         {userInfo ? (
           <div>
             <button onClick={comenzarJuego} className="boton-comenzar">
               Comenzar Juego
             </button>
-
-            {/* Mostrar el componente Juego solo si hay una partida */}
-            {partida && <Juego nombreUsuario={userInfo.name} partida={partida} />}
+  
+            {/* Mostrar el componente Juego o manejar la carga y errores */}
+            {partida ? (
+              <Juego nombreUsuario={userInfo.name} partida={partida} />
+            ) : loading ? (
+              <p>Cargando la partida...</p>
+            ) : error ? (
+              <p>Error: {error}</p>
+            ) : null}
           </div>
         ) : (
           <p>Por favor, inicia sesión para comenzar el juego.</p>

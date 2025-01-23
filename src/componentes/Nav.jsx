@@ -46,8 +46,11 @@ const Nav = ({ onLoginSuccess }) => {
 
     setShowLogin(false); // Cerrar el modal de login
     if (onLoginSuccess) {
-      onLoginSuccess(data.nombreUsuario); // Pasar el nombre de usuario a la página principal
+      onLoginSuccess({ id: data.usuarioId, name: data.nombreUsuario, token: data.token });
     }
+    
+     // Recargar la página
+    window.location.reload(); // <- Esta línea recarga la página
   };
 
   const handleLogout = () => {
