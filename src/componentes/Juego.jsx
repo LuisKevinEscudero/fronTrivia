@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import "../css/Juego.css";
 
-const Juego = ({ nombreUsuario, partida }) => {
+const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   const [preguntaIndex, setPreguntaIndex] = useState(0); // Índice de la pregunta actual
   const [respuestaUsuario, setRespuestaUsuario] = useState(""); // Respuesta del usuario
   const [mensaje, setMensaje] = useState(""); // Mensaje del backend
   const [respondida, setRespondida] = useState(false); // Para saber si la pregunta ya fue respondida
+  const [preguntasRespondidas, setPreguntasRespondidas] = useState(
+    Array(partida.preguntas.length).fill(false)
+  ); // Estado para las preguntas respondidas
+  const [partidaFinalizada, setPartidaFinalizada] = useState(false); // Estado para saber si la partida terminó
 
   const token = localStorage.getItem("authToken"); // Obtener el token desde el localStorage
 
@@ -16,9 +20,14 @@ const Juego = ({ nombreUsuario, partida }) => {
       return;
     }
 
+    // Determinar si todas las preguntas han sido contestadas
+    const todasContestadas =
+      preguntasRespondidas.filter((resp) => resp).length ===
+      partida.preguntas.length - 1;
+
     try {
       const response = await fetch(
-        `http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${partida.preguntas[preguntaIndex].id}&respuestaUsuario=${respuesta}`,
+        `http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${partida.preguntas[preguntaIndex].id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
         {
           method: "POST",
           headers: {
@@ -32,6 +41,18 @@ const Juego = ({ nombreUsuario, partida }) => {
       if (response.ok) {
         setMensaje(data); // Mostrar el mensaje del backend
         setRespondida(true); // Marcar la pregunta como respondida
+
+        // Marcar la pregunta actual como respondida en el estado
+        setPreguntasRespondidas((prev) => {
+          const nuevoEstado = [...prev];
+          nuevoEstado[preguntaIndex] = true;
+          return nuevoEstado;
+        });
+
+        // Si la partida ha finalizado según el backend
+        if (data.includes("La partida ha terminado")) {
+          setPartidaFinalizada(true);
+        }
       } else {
         setMensaje(data || "Error al responder la pregunta.");
       }
@@ -41,13 +62,15 @@ const Juego = ({ nombreUsuario, partida }) => {
   };
 
   const siguientePregunta = () => {
-    if (partida.preguntas.length > preguntaIndex + 1) {
-      setPreguntaIndex(preguntaIndex + 1); // Pasar a la siguiente pregunta
-      setRespondida(false); // Restablecer el estado de la respuesta
-      setRespuestaUsuario(""); // Borrar la respuesta seleccionada
-      setMensaje(""); // Limpiar mensaje
+    if (partidaFinalizada) {
+      reiniciarJuego(); // Llama a la función de reinicio
+    } else if (partida.preguntas.length > preguntaIndex + 1) {
+      setPreguntaIndex(preguntaIndex + 1);
+      setRespondida(false);
+      setRespuestaUsuario("");
+      setMensaje("");
     } else {
-      setMensaje("¡Has terminado la partida!"); // Si ya no hay más preguntas
+      setMensaje("¡Has terminado la partida!");
     }
   };
 
@@ -63,7 +86,7 @@ const Juego = ({ nombreUsuario, partida }) => {
             key={index}
             onClick={() => {
               setRespuestaUsuario(opcion); // Establece la respuesta seleccionada
-              responderPregunta(opcion);    // Llama a la función para comprobar la respuesta
+              responderPregunta(opcion); // Llama a la función para comprobar la respuesta
             }}
             className={respuestaUsuario === opcion ? "opcion-seleccionada" : ""}
           >
@@ -73,10 +96,10 @@ const Juego = ({ nombreUsuario, partida }) => {
       </div>
       <p>{mensaje}</p>
 
-      {/* Mostrar el botón "Siguiente Pregunta" solo si la pregunta ha sido respondida */}
+      {/* Mostrar el botón según el estado de la partida */}
       {respondida && (
         <button onClick={siguientePregunta} className="boton-siguiente">
-          Siguiente Pregunta
+          {partidaFinalizada ? "Volver a iniciar el juego" : "Siguiente Pregunta"}
         </button>
       )}
     </div>
