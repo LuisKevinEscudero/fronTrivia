@@ -82,7 +82,7 @@ const PaginaPrincipal = () => {
   
             {/* Mostrar el componente Juego o manejar la carga y errores */}
             {partida ? (
-              <Juego nombreUsuario={userInfo.name} partida={partida} />
+              <Juego nombreUsuario={userInfo.name} partida={partida} reiniciarJuego={comenzarJuego} />
             ) : loading ? (
               <p>Cargando la partida...</p>
             ) : error ? (

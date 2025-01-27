@@ -9,6 +9,7 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   const [preguntasRespondidas, setPreguntasRespondidas] = useState(
     Array(partida.preguntas.length).fill(false)
   ); // Estado para las preguntas respondidas
+  const [puntuacion, setPuntuacion] = useState(partida.puntuacion || 0); // Estado para almacenar la puntuación, inicializada desde el backend
   const [partidaFinalizada, setPartidaFinalizada] = useState(false); // Estado para saber si la partida terminó
 
   const token = localStorage.getItem("authToken"); // Obtener el token desde el localStorage
@@ -49,6 +50,11 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
           return nuevoEstado;
         });
 
+        // Si la respuesta es correcta, sumar puntos
+        if (respuesta === partida.preguntas[preguntaIndex].respuesta) {
+          setPuntuacion(puntuacion + partida.preguntas[preguntaIndex].puntos); // Actualiza la puntuación con los puntos de la pregunta
+        }
+
         // Si la partida ha finalizado según el backend
         if (data.includes("La partida ha terminado")) {
           setPartidaFinalizada(true);
@@ -62,24 +68,26 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   };
 
   const siguientePregunta = () => {
-    if (partidaFinalizada) {
-      reiniciarJuego(); // Llama a la función de reinicio
-    } else if (partida.preguntas.length > preguntaIndex + 1) {
+    if (partida.preguntas.length > preguntaIndex + 1) {
       setPreguntaIndex(preguntaIndex + 1);
       setRespondida(false);
       setRespuestaUsuario("");
       setMensaje("");
     } else {
-      setMensaje("¡Has terminado la partida!");
+      setPartidaFinalizada(true); // Marcar la partida como finalizada
     }
   };
 
   const preguntaActual = partida.preguntas[preguntaIndex];
 
   return (
-    <div>
+    <div className="contenedor-juego">
       <h2>Pregunta {preguntaIndex + 1}</h2>
-      <p>{preguntaActual.pregunta}</p>
+      <p className="pregunta">{preguntaActual.pregunta}</p>
+
+      {/* Mostrar marcador de puntuación */}
+      <div className="puntuacion">Puntuación: {puntuacion}</div>
+
       <div className="opciones">
         {preguntaActual.opciones.map((opcion, index) => (
           <button
@@ -94,13 +102,16 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
           </button>
         ))}
       </div>
-      <p>{mensaje}</p>
 
-      {/* Mostrar el botón según el estado de la partida */}
-      {respondida && (
-        <button onClick={siguientePregunta} className="boton-siguiente">
-          {partidaFinalizada ? "Volver a iniciar el juego" : "Siguiente Pregunta"}
-        </button>
+      <p className={mensaje.includes("correcta") ? "mensaje mensaje-correcto" : "mensaje mensaje-incorrecto"}>
+        {mensaje}
+      </p>
+
+      {/* Ya no mostramos ningún botón cuando la partida ha finalizado */}
+      {partidaFinalizada && (
+        <div className="mensaje-finalizado">
+          <p>¡Juego finalizado! Tu puntuación final es: {puntuacion}</p>
+        </div>
       )}
     </div>
   );

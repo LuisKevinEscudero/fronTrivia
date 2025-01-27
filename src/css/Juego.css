@@ -38,10 +38,12 @@
   margin-top: 30px;
   font-size: 1.2rem;
   color: #333; /* Texto oscuro */
+  font-weight: bold;
 }
 
 /* Botón de continuar (o finalizar) */
-.boton-continuar {
+.boton-continuar,
+.boton-siguiente {
   margin-top: 20px;
   padding: 12px 25px;
   font-size: 1rem;
@@ -54,7 +56,8 @@
 }
 
 /* Hover para el botón de continuar */
-.boton-continuar:hover {
+.boton-continuar:hover,
+.boton-siguiente:hover {
   background-color: #0056b3;
 }
 
@@ -100,20 +103,46 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Sombra más fuerte */
 }
 
-.boton-siguiente {
-  margin-top: 20px;
-  padding: 12px 25px;
-  font-size: 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* Estilos del marcador de puntuación */
+.puntuacion {
+  font-size: 1.5rem; /* Tamaño de la fuente de la puntuación */
+  color: #333; /* Color de texto oscuro */
+  font-weight: bold;
+  margin-top: 20px; /* Espaciado superior */
 }
 
-/* Hover para el botón de continuar */
-.boton-siguiente:hover {
-  background-color: #0056b3;
+/* Ajustes de estilo para el final del juego */
+.final-juego {
+  margin-top: 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Estilo para los mensajes de finalización */
+.final-juego p {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.final-juego .puntuacion-final {
+  font-size: 2rem;
+  color: #e91e63; /* Color de la puntuación final */
+  font-weight: bold;
+}
+
+/* Mensajes de retroalimentación */
+.mensaje {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.mensaje-correcto {
+  color: #4CAF50; /* Verde para correcto */
+}
+
+.mensaje-incorrecto {
+  color: #FF5733; /* Rojo para incorrecto */
 }
 
