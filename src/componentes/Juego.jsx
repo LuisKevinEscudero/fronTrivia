@@ -103,9 +103,17 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
         ))}
       </div>
 
-      <p className={mensaje.includes("correcta") ? "mensaje mensaje-correcto" : "mensaje mensaje-incorrecto"}>
+      <p className={ mensaje === "Respuesta correcta" ? "mensaje mensaje-correcto" : "mensaje mensaje-incorrecto"}>
         {mensaje}
       </p>
+
+      {/* Botón para pasar a la siguiente pregunta */}
+      {respondida && !partidaFinalizada && (
+        <button className="boton-siguiente" onClick={siguientePregunta}>
+          Siguiente pregunta
+        </button>
+      )}
+
 
       {/* Ya no mostramos ningún botón cuando la partida ha finalizado */}
       {partidaFinalizada && (
