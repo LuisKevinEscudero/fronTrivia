@@ -97,15 +97,20 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
               responderPregunta(opcion); // Llama a la función para comprobar la respuesta
             }}
             className={respuestaUsuario === opcion ? "opcion-seleccionada" : ""}
+            disabled={respondida} // Deshabilitar si la pregunta ya fue respondida
           >
             {opcion}
           </button>
         ))}
       </div>
 
-      <p className={ mensaje === "Respuesta correcta" ? "mensaje mensaje-correcto" : "mensaje mensaje-incorrecto"}>
+      <p className={ 
+        mensaje.startsWith("Respuesta correcta") ? "mensaje mensaje-correcto" : 
+        mensaje.startsWith("Respuesta incorrecta") ? "mensaje mensaje-incorrecto" : ""
+      }>
         {mensaje}
       </p>
+
 
       {/* Botón para pasar a la siguiente pregunta */}
       {respondida && !partidaFinalizada && (

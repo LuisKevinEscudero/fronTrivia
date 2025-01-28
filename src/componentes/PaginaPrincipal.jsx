@@ -8,45 +8,47 @@ const PaginaPrincipal = () => {
   const [partida, setPartida] = useState(null); // Estado para almacenar la partida
   const [loading, setLoading] = useState(false); // Estado para manejar la carga
   const [error, setError] = useState(null); // Estado para manejar errores
+  const [mostrarBotonComenzar, setMostrarBotonComenzar] = useState(true); // Controlar si se muestra el botón de comenzar
 
-  // Verifica si el usuario está logueado al cargar la página
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const expirationTime = localStorage.getItem("authTokenExpiration");
     const userId = localStorage.getItem("authUserId");
     const userName = localStorage.getItem("authUserName");
-    // Verifica si el token es válido
+
     if (token && userId && userName && expirationTime && new Date().getTime() < expirationTime) {
       setUserInfo({ id: userId, name: userName, token });
     } else {
-      setUserInfo(null); // Si no está logueado, aseguramos que no se muestre el botón de jugar
+      setUserInfo(null);
     }
-  }, []); // Este useEffect solo corre una vez, al cargar la página
+  }, []);
 
   const handleLoginSuccess = (data) => {
-    // Al hacer login, guardar la información del usuario
     setUserInfo({ id: data.usuarioId, name: data.nombreUsuario, token: data.token });
   };
 
-  // Función para crear la partida
   const comenzarJuego = async () => {
     if (!userInfo) return;
-  
+
     setLoading(true);
     setError(null);
-  
+
     try {
-      const response = await fetch("http://localhost:8080/api/partida/crear?nombreUsuario=" + userInfo.name, {
-        method: "POST",
-        headers: {
-          Authorization: userInfo.token, // Aquí va el token del usuario
-          "Content-Type": "application/json",
-        },
-      });
-  
+      const response = await fetch(
+        "http://localhost:8080/api/partida/crear?nombreUsuario=" + userInfo.name,
+        {
+          method: "POST",
+          headers: {
+            Authorization: userInfo.token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       const data = await response.json();
       if (response.ok) {
         setPartida(data);
+        setMostrarBotonComenzar(false); // Oculta el botón al comenzar la partida
       } else {
         setError(data.message || "Error al crear la partida.");
       }
@@ -55,15 +57,15 @@ const PaginaPrincipal = () => {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   return (
     <div>
-      <Nav onLoginSuccess={handleLoginSuccess} /> {/* Se pasa el callback al componente Nav */}
+      <Nav onLoginSuccess={handleLoginSuccess} />
       <div className="contenedor-principal">
         <div className="contenedor-logo">
           <img
-            src="https://via.placeholder.com/150" // Cambia esto por el enlace a tu logo
+            src="https://via.placeholder.com/150"
             alt="Logo del juego"
             className="logo"
           />
@@ -72,17 +74,26 @@ const PaginaPrincipal = () => {
           <h1>¡Bienvenido al Trivial de Videojuegos!</h1>
           <p>Demuestra cuánto sabes sobre videojuegos en este divertido juego de trivia.</p>
         </div>
-  
-        {/* Mostrar el botón de comenzar juego solo si el usuario está logueado */}
+
         {userInfo ? (
           <div>
-            <button onClick={comenzarJuego} className="boton-comenzar">
-              Comenzar Juego
-            </button>
-  
+            {/* Solo mostrar el botón si mostrarBotonComenzar es true */}
+            {mostrarBotonComenzar && (
+              <button onClick={comenzarJuego} className="boton-comenzar">
+                Comenzar Juego
+              </button>
+            )}
+
             {/* Mostrar el componente Juego o manejar la carga y errores */}
             {partida ? (
-              <Juego nombreUsuario={userInfo.name} partida={partida} reiniciarJuego={comenzarJuego} />
+              <Juego
+                nombreUsuario={userInfo.name}
+                partida={partida}
+                reiniciarJuego={() => {
+                  setPartida(null); // Reinicia la partida
+                  setMostrarBotonComenzar(true); // Vuelve a mostrar el botón
+                }}
+              />
             ) : loading ? (
               <p>Cargando la partida...</p>
             ) : error ? (
