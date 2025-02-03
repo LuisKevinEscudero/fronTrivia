@@ -32,7 +32,8 @@ const PaginaPrincipal = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+          //`http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+          `https://triviaback-latest.onrender.com/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
           {
             method: "GET",
             headers: {
@@ -75,7 +76,8 @@ const PaginaPrincipal = () => {
 
     try {
       const responseVerificacion = await fetch(
-        `http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+        `https://triviaback-latest.onrender.com/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+        //`http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
         {
           method: "GET",
           headers: {
@@ -104,7 +106,8 @@ const PaginaPrincipal = () => {
 
       // Si no tiene partida, crear una nueva
       const response = await fetch(
-        "http://localhost:8080/api/partida/crear?nombreUsuario=" + userInfo.name,
+        "https://triviaback-latest.onrender.com/api/partida/crear?nombreUsuario=" + userInfo.name,
+        //"http://localhost:8080/api/partida/crear?nombreUsuario=" + userInfo.name,
         {
           method: "POST",
           headers: {

@@ -1,13 +1,8 @@
 import React from "react";
 import "../css/DetallePartida.css"; // Estilos para la pantalla de detalles
 
-const DetallePartida = ({ partida }) => {
+const DetallePartida = ({ partida, respuestasUsuario, puntuacion }) => {
   if (!partida) return <p>No hay datos de la partida disponibles.</p>;
-
-  // Verificamos si la propiedad 'preguntas' existe y es un arreglo
-  if (!Array.isArray(partida.preguntas) || partida.preguntas.length === 0) {
-    return <p>No hay preguntas disponibles para esta partida.</p>;
-  }
 
   return (
     <div className="detalle-partida">
@@ -16,20 +11,25 @@ const DetallePartida = ({ partida }) => {
       <p><strong>Estado:</strong> {partida.estado}</p>
       <p><strong>Fecha de Inicio:</strong> {new Date(partida.fechaInicio).toLocaleString()}</p>
       <p><strong>Tiempo Total:</strong> {partida.tiempoTotal ? `${partida.tiempoTotal} segundos` : "En curso..."}</p>
+      <p><strong>Puntuación Final:</strong> {puntuacion}</p>
 
-      <h3>Preguntas:</h3>
-      {/* Verificamos si las preguntas existen y las mostramos */}
-      {partida.preguntas && partida.preguntas.length > 0 ? (
+      <h3>📌 Resumen de Preguntas</h3>
+      {respuestasUsuario.length > 0 ? (
         <ul>
-          {partida.preguntas.map((pregunta, index) => (
+          {respuestasUsuario.map((respuesta, index) => (
             <li key={index}>
-              {/* Accedemos correctamente a la propiedad 'pregunta' */}
-              <strong>{pregunta.pregunta}</strong>
+              <strong>{respuesta.pregunta}</strong>
+              <p>
+                <span className={respuesta.esCorrecta ? "respuesta-correcta" : "respuesta-incorrecta"}>
+                  Tu respuesta: {respuesta.respuestaUsuario}
+                </span>
+              </p>
+              <p><strong>Respuesta correcta:</strong> {respuesta.respuestaCorrecta}</p>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No se encontraron preguntas para esta partida.</p>
+        <p>No se encontraron respuestas para esta partida.</p>
       )}
     </div>
   );

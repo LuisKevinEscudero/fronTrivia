@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/Juego.css";
+import DetallePartida from "./DetallePartida"; // Importamos el resumen
 
 const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   const [preguntaIndex, setPreguntaIndex] = useState(0);
@@ -12,7 +13,7 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   );
   const [puntuacion, setPuntuacion] = useState(partida.puntuacion || 0);
   const [partidaFinalizada, setPartidaFinalizada] = useState(false);
-  const [respuestasUsuario, setRespuestasUsuario] = useState([]);
+  const [respuestasUsuario, setRespuestasUsuario] = useState([]); // Estado independiente
 
   const token = localStorage.getItem("authToken");
   const preguntaActual = partida.preguntas[preguntaIndex];
@@ -39,7 +40,8 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
+        `https://triviaback-latest.onrender.com/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
+        //`http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
         {
           method: "POST",
           headers: {
@@ -61,9 +63,16 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
         });
 
         const esCorrecta = respuesta === preguntaActual.respuesta;
+
+        // 🔹 Guardamos la respuesta del usuario en un estado independiente
         setRespuestasUsuario((prev) => [
           ...prev,
-          { pregunta: preguntaActual.pregunta, respuesta, esCorrecta },
+          {
+            pregunta: preguntaActual.pregunta,
+            respuestaUsuario: respuesta,
+            respuestaCorrecta: preguntaActual.respuesta,
+            esCorrecta,
+          },
         ]);
 
         if (esCorrecta) {
@@ -92,59 +101,52 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
     }
   };
 
-  const verResumen = () => {
-    window.location.reload(); // Recargar la página para mostrar el resumen
-  };
-
   return (
     <div className="contenedor-juego">
-      <h2>Pregunta {preguntaIndex + 1}</h2>
-      <p className="pregunta">{preguntaActual.pregunta}</p>
+      {!partidaFinalizada ? (
+        <>
+          <h2>Pregunta {preguntaIndex + 1}</h2>
+          <p className="pregunta">{preguntaActual.pregunta}</p>
 
-      <div className="puntuacion">Puntuación: {puntuacion}</div>
+          <div className="puntuacion">Puntuación: {puntuacion}</div>
 
-      <div className="opciones">
-        {opcionesAleatorias.map((opcion, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              setRespuestaUsuario(opcion);
-              responderPregunta(opcion);
-            }}
-            className={respuestaUsuario === opcion ? "opcion-seleccionada" : ""}
-            disabled={respondida}
+          <div className="opciones">
+            {opcionesAleatorias.map((opcion, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setRespuestaUsuario(opcion);
+                  responderPregunta(opcion);
+                }}
+                className={respuestaUsuario === opcion ? "opcion-seleccionada" : ""}
+                disabled={respondida}
+              >
+                {opcion}
+              </button>
+            ))}
+          </div>
+
+          <p
+            className={
+              mensaje.startsWith("Respuesta correcta")
+                ? "mensaje mensaje-correcto"
+                : mensaje.startsWith("Respuesta incorrecta")
+                ? "mensaje mensaje-incorrecto"
+                : ""
+            }
           >
-            {opcion}
-          </button>
-        ))}
-      </div>
+            {mensaje}
+          </p>
 
-      <p
-        className={
-          mensaje.startsWith("Respuesta correcta")
-            ? "mensaje mensaje-correcto"
-            : mensaje.startsWith("Respuesta incorrecta")
-            ? "mensaje mensaje-incorrecto"
-            : ""
-        }
-      >
-        {mensaje}
-      </p>
-
-      {respondida && !partidaFinalizada && (
-        <button className="boton-siguiente" onClick={siguientePregunta}>
-          Siguiente pregunta
-        </button>
-      )}
-
-      {partidaFinalizada && (
-        <div className="mensaje-finalizado">
-          <p>¡Juego finalizado! Tu puntuación final es: {puntuacion}</p>
-          {/* Botón para ver el resumen */}
-          <button className="boton-ver-resumen" onClick={verResumen}>
-            Ver Resumen de la Partida
-          </button>
-        </div>
+          {respondida && !partidaFinalizada && (
+            <button className="boton-siguiente" onClick={siguientePregunta}>
+              Siguiente pregunta
+            </button>
+          )}
+        </>
+      ) : (
+        // 🔹 Cuando termina la partida, mostramos el resumen
+        <DetallePartida partida={partida} respuestasUsuario={respuestasUsuario} puntuacion={puntuacion} />
       )}
     </div>
   );
