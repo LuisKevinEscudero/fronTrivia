@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../css/PaginaPrincipal.css"; // Estilos de la página principal
 import Nav from "./Nav"; // Importamos el componente de navegación
 import Juego from "./Juego"; // Importamos el componente Juego
+import DetallePartida from "./DetallePartida"; // Importa el nuevo componente
 
 const PaginaPrincipal = () => {
   const [userInfo, setUserInfo] = useState(null); // Guardar la información del usuario
@@ -10,6 +11,7 @@ const PaginaPrincipal = () => {
   const [error, setError] = useState(null); // Estado para manejar errores
   const [mostrarBotonComenzar, setMostrarBotonComenzar] = useState(true); // Controlar si se muestra el botón de comenzar
 
+  // Verifica si hay un usuario autenticado al cargar la página
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const expirationTime = localStorage.getItem("authTokenExpiration");
@@ -23,6 +25,44 @@ const PaginaPrincipal = () => {
     }
   }, []);
 
+  // 🚀 Verificar si el usuario ya jugó una partida hoy al iniciar sesión
+  useEffect(() => {
+    const obtenerPartidaExistente = async () => {
+      if (!userInfo) return;
+
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: userInfo.token,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Error al obtener la partida del día.");
+        }
+
+        const partidas = await response.json();
+        const hoy = new Date().toISOString().split("T")[0]; // Fecha de hoy en formato YYYY-MM-DD
+
+        // Buscar si el jugador ya tiene una partida de hoy
+        const partidaDeHoy = partidas.find(partida => partida.fechaInicio.startsWith(hoy));
+
+        if (partidaDeHoy) {
+          setPartida(partidaDeHoy); // Guardar la partida existente
+          setMostrarBotonComenzar(false); // Ocultar el botón
+        }
+      } catch (error) {
+        console.error("Error al obtener la partida:", error);
+      }
+    };
+
+    obtenerPartidaExistente();
+  }, [userInfo]);
+
   const handleLoginSuccess = (data) => {
     setUserInfo({ id: data.usuarioId, name: data.nombreUsuario, token: data.token });
   };
@@ -34,6 +74,35 @@ const PaginaPrincipal = () => {
     setError(null);
 
     try {
+      const responseVerificacion = await fetch(
+        `http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: userInfo.token,
+          },
+        }
+      );
+
+      if (!responseVerificacion.ok) {
+        throw new Error("Error al verificar la partida del día.");
+      }
+
+      const partidas = await responseVerificacion.json();
+      const hoy = new Date().toISOString().split("T")[0]; // Fecha de hoy en formato YYYY-MM-DD
+
+      // Buscar si el jugador ya tiene una partida de hoy
+      const partidaDeHoy = partidas.find(partida => partida.fechaInicio.startsWith(hoy));
+
+      if (partidaDeHoy) {
+        setError("Ya has jugado una partida hoy.");
+        setPartida(partidaDeHoy); // Mostrar detalles de la partida
+        setMostrarBotonComenzar(false); // Ocultar el botón
+        setLoading(false);
+        return; // No permitir que inicie una nueva partida
+      }
+
+      // Si no tiene partida, crear una nueva
       const response = await fetch(
         "http://localhost:8080/api/partida/crear?nombreUsuario=" + userInfo.name,
         {
@@ -47,7 +116,7 @@ const PaginaPrincipal = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setPartida(data);
+        setPartida(data); // Setea la nueva partida
         setMostrarBotonComenzar(false); // Oculta el botón al comenzar la partida
       } else {
         setError(data.message || "Error al crear la partida.");
@@ -57,6 +126,12 @@ const PaginaPrincipal = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const finalizarJuego = () => {
+    // Aquí se va a manejar el fin del juego, y recargamos la página
+    console.log("juego dfiasd");
+    window.location.reload();
   };
 
   return (
@@ -77,15 +152,8 @@ const PaginaPrincipal = () => {
 
         {userInfo ? (
           <div>
-            {/* Solo mostrar el botón si mostrarBotonComenzar es true */}
-            {mostrarBotonComenzar && (
-              <button onClick={comenzarJuego} className="boton-comenzar">
-                Comenzar Juego
-              </button>
-            )}
-
-            {/* Mostrar el componente Juego o manejar la carga y errores */}
-            {partida ? (
+            {/* Mostrar solo el juego si la partida no está finalizada */}
+            {partida && partida.estado !== "FINALIZADA" && (
               <Juego
                 nombreUsuario={userInfo.name}
                 partida={partida}
@@ -94,11 +162,22 @@ const PaginaPrincipal = () => {
                   setMostrarBotonComenzar(true); // Vuelve a mostrar el botón
                 }}
               />
-            ) : loading ? (
-              <p>Cargando la partida...</p>
-            ) : error ? (
-              <p>Error: {error}</p>
-            ) : null}
+            )}
+
+            {/* Mostrar el resumen de las respuestas solo cuando el estado de la partida sea finalizado */}
+            {partida && partida.estado === "FINALIZADA" && (
+              <DetallePartida partida={partida} finalizarJuego={finalizarJuego} />
+            )}
+
+            {/* Si no existe partida, mostrar el botón de comenzar juego */}
+            {!partida && mostrarBotonComenzar && (
+              <button onClick={comenzarJuego} className="boton-comenzar">
+                Comenzar Juego
+              </button>
+            )}
+
+            {/* Mostrar mensajes de carga o error */}
+            {loading ? <p>Cargando la partida...</p> : error ? <p>{error}</p> : null}
           </div>
         ) : (
           <p>Por favor, inicia sesión para comenzar el juego.</p>

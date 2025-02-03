@@ -1,0 +1,38 @@
+.detalle-partida {
+    background: #222;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  
+  .detalle-partida h2 {
+    color: #ffcc00;
+  }
+  
+  .detalle-partida ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .detalle-partida li {
+    background: #333;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .respuesta-correcta {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .respuesta-incorrecta {
+    color: red;
+    font-weight: bold;
+  }
+  
+  
