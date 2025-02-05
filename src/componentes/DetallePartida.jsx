@@ -29,7 +29,7 @@ const DetallePartida = ({ partida, respuestasUsuario, puntuacion }) => {
           ))}
         </ul>
       ) : (
-        <p>No se encontraron respuestas para esta partida.</p>
+        <p>No se encontraron respuestas para esta partida</p>
       )}
     </div>
   );
