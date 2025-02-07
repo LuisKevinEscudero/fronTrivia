@@ -18,6 +18,11 @@ const PaginaPrincipal = () => {
     const userId = localStorage.getItem("authUserId");
     const userName = localStorage.getItem("authUserName");
 
+    console.log("TOKEN en localStorage:", token);
+    console.log("Expiración del token:", expirationTime);
+    console.log("ID de usuario:", userId);
+    console.log("Nombre de usuario:", userName);
+
     if (token && userId && userName && expirationTime && new Date().getTime() < expirationTime) {
       setUserInfo({ id: userId, name: userName, token });
     } else {
