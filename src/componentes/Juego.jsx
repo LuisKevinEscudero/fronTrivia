@@ -3,6 +3,9 @@ import "../css/Juego.css";
 import DetallePartida from "./DetallePartida";
 
 const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
+  const clavePuntuacion = `puntuacion_${nombreUsuario}`;
+  const claveRespuestas = `respuestasUsuario_${nombreUsuario}`;
+
   const [preguntaIndex, setPreguntaIndex] = useState(0);
   const [opcionesAleatorias, setOpcionesAleatorias] = useState([]);
   const [respuestaUsuario, setRespuestaUsuario] = useState("");
@@ -12,10 +15,12 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
     Array(partida.preguntas.length).fill(false)
   );
   const [puntuacion, setPuntuacion] = useState(() => {
-    return parseInt(localStorage.getItem("puntuacion"), 10) || 0;
+    return parseInt(localStorage.getItem(clavePuntuacion), 10) || 0;
   });
   const [partidaFinalizada, setPartidaFinalizada] = useState(false);
-  const [respuestasUsuario, setRespuestasUsuario] = useState([]);
+  const [respuestasUsuario, setRespuestasUsuario] = useState(() => {
+    return JSON.parse(localStorage.getItem(claveRespuestas)) || [];
+  });
 
   const token = localStorage.getItem("authToken");
   const preguntaActual = partida.preguntas[preguntaIndex];
@@ -40,12 +45,12 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
 
   // 🔹 Guardar respuestas en localStorage cuando cambien
   useEffect(() => {
-    localStorage.setItem("respuestasUsuario", JSON.stringify(respuestasUsuario));
+    localStorage.setItem(claveRespuestas, JSON.stringify(respuestasUsuario));
   }, [respuestasUsuario]);
 
   // 🔹 Guardar puntuación en localStorage cuando cambie
   useEffect(() => {
-    localStorage.setItem("puntuacion", puntuacion);
+    localStorage.setItem(clavePuntuacion, puntuacion);
   }, [puntuacion]);
 
   const responderPregunta = async (respuesta) => {

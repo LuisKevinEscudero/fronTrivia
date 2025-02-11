@@ -4,12 +4,18 @@ import "../css/DetallePartida.css"; // Estilos para la pantalla de detalles
 const DetallePartida = ({ partida, respuestasUsuario = [], puntuacion }) => {
   if (!partida) return <p>No hay datos de la partida disponibles.</p>;
 
+  const nombreUsuario = partida.usuario.nombreUsuario;
+
+  // 🔹 Recuperar respuestas y puntuación usando claves únicas por usuario
+  const claveRespuestas = `respuestasUsuario_${nombreUsuario}`;
+  const clavePuntuacion = `puntuacion_${nombreUsuario}`;
+
   // 🔹 Recuperar respuestas guardadas en localStorage si no hay respuestas en props
-  const respuestasGuardadas = JSON.parse(localStorage.getItem("respuestasUsuario")) || [];
+  const respuestasGuardadas = JSON.parse(localStorage.getItem(claveRespuestas)) || [];
   respuestasUsuario = respuestasUsuario.length ? respuestasUsuario : respuestasGuardadas;
 
   // 🔹 Recuperar la puntuación de localStorage si no viene en props
-  const puntuacionGuardada = parseInt(localStorage.getItem("puntuacion"), 10) || 0;
+  const puntuacionGuardada = parseInt(localStorage.getItem(clavePuntuacion), 10) || 0;
   puntuacion = puntuacion !== undefined ? puntuacion : puntuacionGuardada;
 
   return (
