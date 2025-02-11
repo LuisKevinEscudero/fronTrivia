@@ -11,7 +11,9 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   const [preguntasRespondidas, setPreguntasRespondidas] = useState(
     Array(partida.preguntas.length).fill(false)
   );
-  const [puntuacion, setPuntuacion] = useState(partida.puntuacion || 0);
+  const [puntuacion, setPuntuacion] = useState(() => {
+    return parseInt(localStorage.getItem("puntuacion"), 10) || 0;
+  });
   const [partidaFinalizada, setPartidaFinalizada] = useState(false);
   const [respuestasUsuario, setRespuestasUsuario] = useState([]);
 
@@ -28,7 +30,7 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
     }
   }, [preguntaIndex]);
 
-  // Recuperar respuestas del usuario si existen en localStorage
+  // 🔹 Recuperar respuestas del usuario si existen en localStorage
   useEffect(() => {
     const respuestasGuardadas = localStorage.getItem("respuestasUsuario");
     if (respuestasGuardadas) {
@@ -36,9 +38,15 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
     }
   }, []);
 
+  // 🔹 Guardar respuestas en localStorage cuando cambien
   useEffect(() => {
     localStorage.setItem("respuestasUsuario", JSON.stringify(respuestasUsuario));
   }, [respuestasUsuario]);
+
+  // 🔹 Guardar puntuación en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem("puntuacion", puntuacion);
+  }, [puntuacion]);
 
   const responderPregunta = async (respuesta) => {
     if (!partida || !partida.id || !token) {
@@ -75,6 +83,7 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
 
         const esCorrecta = respuesta === preguntaActual.respuesta;
 
+        // 🔹 Guardar respuesta del usuario
         setRespuestasUsuario((prev) => [
           ...prev,
           {
@@ -86,7 +95,11 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
         ]);
 
         if (esCorrecta) {
-          setPuntuacion(puntuacion + preguntaActual.puntos);
+          setPuntuacion((prevPuntuacion) => {
+            const nuevaPuntuacion = prevPuntuacion + preguntaActual.puntos;
+            localStorage.setItem("puntuacion", nuevaPuntuacion); // 🔹 Guardar inmediatamente en localStorage
+            return nuevaPuntuacion;
+          });
         }
 
         if (data.includes("La partida ha terminado")) {

@@ -4,9 +4,13 @@ import "../css/DetallePartida.css"; // Estilos para la pantalla de detalles
 const DetallePartida = ({ partida, respuestasUsuario = [], puntuacion }) => {
   if (!partida) return <p>No hay datos de la partida disponibles.</p>;
 
-  // Recuperar respuestas de localStorage si están vacías
+  // 🔹 Recuperar respuestas guardadas en localStorage si no hay respuestas en props
   const respuestasGuardadas = JSON.parse(localStorage.getItem("respuestasUsuario")) || [];
   respuestasUsuario = respuestasUsuario.length ? respuestasUsuario : respuestasGuardadas;
+
+  // 🔹 Recuperar la puntuación de localStorage si no viene en props
+  const puntuacionGuardada = parseInt(localStorage.getItem("puntuacion"), 10) || 0;
+  puntuacion = puntuacion !== undefined ? puntuacion : puntuacionGuardada;
 
   return (
     <div className="detalle-partida">
@@ -15,7 +19,7 @@ const DetallePartida = ({ partida, respuestasUsuario = [], puntuacion }) => {
       <p><strong>Estado:</strong> {partida?.estado || "No disponible"}</p>
       <p><strong>Fecha de Inicio:</strong> {partida?.fechaInicio ? new Date(partida.fechaInicio).toLocaleString() : "No disponible"}</p>
       <p><strong>Tiempo Total:</strong> {partida?.tiempoTotal ? `${partida.tiempoTotal} segundos` : "En curso..."}</p>
-      <p><strong>Puntuación Final:</strong> {puntuacion || 0}</p>
+      <p><strong>Puntuación Final:</strong> {puntuacion}</p>
 
       <h3>📌 Resumen de Preguntas</h3>
       {respuestasUsuario.length > 0 ? (
