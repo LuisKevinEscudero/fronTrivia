@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/Juego.css";
-import DetallePartida from "./DetallePartida"; // Importamos el resumen
+import DetallePartida from "./DetallePartida";
 
 const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   const [preguntaIndex, setPreguntaIndex] = useState(0);
@@ -13,7 +13,7 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
   );
   const [puntuacion, setPuntuacion] = useState(partida.puntuacion || 0);
   const [partidaFinalizada, setPartidaFinalizada] = useState(false);
-  const [respuestasUsuario, setRespuestasUsuario] = useState([]); // Estado independiente
+  const [respuestasUsuario, setRespuestasUsuario] = useState([]);
 
   const token = localStorage.getItem("authToken");
   const preguntaActual = partida.preguntas[preguntaIndex];
@@ -28,6 +28,18 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
     }
   }, [preguntaIndex]);
 
+  // Recuperar respuestas del usuario si existen en localStorage
+  useEffect(() => {
+    const respuestasGuardadas = localStorage.getItem("respuestasUsuario");
+    if (respuestasGuardadas) {
+      setRespuestasUsuario(JSON.parse(respuestasGuardadas));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("respuestasUsuario", JSON.stringify(respuestasUsuario));
+  }, [respuestasUsuario]);
+
   const responderPregunta = async (respuesta) => {
     if (!partida || !partida.id || !token) {
       setMensaje("No se puede responder la pregunta. Falta información.");
@@ -40,8 +52,7 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
 
     try {
       const response = await fetch(
-        `https://triviaback-latest.onrender.com/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
-        //`http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
+        `http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
         {
           method: "POST",
           headers: {
@@ -64,7 +75,6 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
 
         const esCorrecta = respuesta === preguntaActual.respuesta;
 
-        // 🔹 Guardamos la respuesta del usuario en un estado independiente
         setRespuestasUsuario((prev) => [
           ...prev,
           {
@@ -145,7 +155,6 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
           )}
         </>
       ) : (
-        // 🔹 Cuando termina la partida, mostramos el resumen
         <DetallePartida partida={partida} respuestasUsuario={respuestasUsuario} puntuacion={puntuacion} />
       )}
     </div>
