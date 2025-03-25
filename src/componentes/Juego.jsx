@@ -107,9 +107,9 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
           });
         }
 
-        if (data.includes("La partida ha terminado")) {
-          setPartidaFinalizada(true);
-        }
+        //if (data.includes("La partida ha terminado")) {
+        //  setPartidaFinalizada(true);
+        //}
       } else {
         setMensaje(data || "Error al responder la pregunta.");
       }
@@ -124,9 +124,9 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
       setRespondida(false);
       setRespuestaUsuario("");
       setMensaje("");
-    } else {
-      setPartidaFinalizada(true);
-    }
+    } //else {
+    //  setPartidaFinalizada(true);
+    //}
   };
 
   return (
@@ -167,10 +167,17 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
           </p>
 
           {respondida && !partidaFinalizada && (
-            <button className="boton-siguiente" onClick={siguientePregunta}>
-              Siguiente pregunta
-            </button>
+            preguntaIndex < partida.preguntas.length - 1 ? (
+              <button className="boton-siguiente" onClick={siguientePregunta}>
+                Siguiente pregunta
+              </button>
+            ) : (
+              <button className="boton-finalizar" onClick={() => setPartidaFinalizada(true)}>
+                Finalizar partida
+              </button>
+            )
           )}
+
         </>
       ) : (
         <DetallePartida partida={partida} respuestasUsuario={respuestasUsuario} puntuacion={puntuacion} />

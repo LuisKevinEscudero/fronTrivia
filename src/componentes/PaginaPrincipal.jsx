@@ -35,10 +35,15 @@ const PaginaPrincipal = () => {
     const obtenerPartidaExistente = async () => {
       if (!userInfo) return;
 
+      // 🚨 Si el usuario es "admin", no verificar la partida del día
+      if (userInfo.name.toLowerCase() === "admin") {
+        console.log("Admin detectado, no se verifica la partida del día.");
+        return;
+      }
+
       try {
         const response = await fetch(
           `http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
-          //`https://triviaback-latest.onrender.com/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
           {
             method: "GET",
             headers: {
@@ -52,14 +57,14 @@ const PaginaPrincipal = () => {
         }
 
         const partidas = await response.json();
-        const hoy = new Date().toISOString().split("T")[0]; // Fecha de hoy en formato YYYY-MM-DD
+        const hoy = new Date().toISOString().split("T")[0];
 
         // Buscar si el jugador ya tiene una partida de hoy
-        const partidaDeHoy = partidas.find(partida => partida.fechaInicio.startsWith(hoy));
+        const partidaDeHoy = partidas.find((partida) => partida.fechaInicio.startsWith(hoy));
 
         if (partidaDeHoy) {
-          setPartida(partidaDeHoy); // Guardar la partida existente
-          setMostrarBotonComenzar(false); // Ocultar el botón
+          setPartida(partidaDeHoy);
+          setMostrarBotonComenzar(false);
         }
       } catch (error) {
         console.error("Error al obtener la partida:", error);
