@@ -7,8 +7,8 @@ const DetallePartida = ({ partida, respuestasUsuario = [], puntuacion }) => {
   const nombreUsuario = partida.usuario.nombreUsuario;
 
   // 🔹 Recuperar respuestas y puntuación usando claves únicas por usuario
-  const claveRespuestas = `respuestasUsuario_${nombreUsuario}`;
-  const clavePuntuacion = `puntuacion_${nombreUsuario}`;
+  const claveRespuestas = `respuestasUsuario_${nombreUsuario}_partida_${partida.id}`;
+  const clavePuntuacion = `puntuacion_${nombreUsuario}_partida_${partida.id}`;
 
   // 🔹 Recuperar respuestas guardadas en localStorage si no hay respuestas en props
   const respuestasGuardadas = JSON.parse(localStorage.getItem(claveRespuestas)) || [];
@@ -26,7 +26,7 @@ const DetallePartida = ({ partida, respuestasUsuario = [], puntuacion }) => {
       <p><strong>Fecha de Inicio:</strong> {partida?.fechaInicio ? new Date(partida.fechaInicio).toLocaleString() : "No disponible"}</p>
       <p><strong>Tiempo Total:</strong> {partida?.tiempoTotal ? `${partida.tiempoTotal} segundos` : "En curso..."}</p>
       <p><strong>Puntuación Final:</strong> {puntuacion}</p>
-
+ 
       <h3>📌 Resumen de Preguntas</h3>
       {respuestasUsuario.length > 0 ? (
         <ul>

@@ -3,8 +3,9 @@ import "../css/Juego.css";
 import DetallePartida from "./DetallePartida";
 
 const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
-  const clavePuntuacion = `puntuacion_${nombreUsuario}`;
-  const claveRespuestas = `respuestasUsuario_${nombreUsuario}`;
+  const clavePuntuacion = `puntuacion_${nombreUsuario}_partida_${partida.id}`;
+  const claveRespuestas = `respuestasUsuario_${nombreUsuario}_partida_${partida.id}`;
+
 
   const [preguntaIndex, setPreguntaIndex] = useState(0);
   const [opcionesAleatorias, setOpcionesAleatorias] = useState([]);
