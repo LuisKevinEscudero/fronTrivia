@@ -6,6 +6,7 @@ const IniciarSesion = ({ onLoginSuccess, onClose }) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false); // Estado para el checkbox "Recordar"
   const [error, setError] = useState("");
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   // Recuperar las credenciales guardadas en localStorage si existe "rememberMe"
   useEffect(() => {
@@ -82,16 +83,23 @@ const IniciarSesion = ({ onLoginSuccess, onClose }) => {
               required
             />
           </div>
-          <div>
-            <label htmlFor="password">Contraseña:</label>
+          <div className="password-container">
             <input
               id="password"
-              type="password"
+              type={mostrarPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setMostrarPassword((prev) => !prev)}
+            >
+              {mostrarPassword ? "Ocultar" : "Mostrar"}
+            </button>
           </div>
+
           <div className="checkbox-container">
             <input
               type="checkbox"

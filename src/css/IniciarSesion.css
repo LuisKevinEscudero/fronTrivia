@@ -114,3 +114,33 @@ button:hover {
 .checkbox-container input:checked {
   border-color: #007bff;
 }
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  flex: 1;
+  padding-right: 80px; /* espacio para el botón */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.toggle-password:hover {
+  background-color: rgba(0, 123, 255, 0.1); /* azul clarito como fondo */
+  color: #0056b3; /* azul más oscuro para el texto */
+}
+
