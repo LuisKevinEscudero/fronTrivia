@@ -26,8 +26,8 @@ const RegistroUsuario = ({ onClose, onRegisterSuccess }) => {
     setSuccess(false);
 
     try {
-      //const response = await fetch("https://triviaback-latest.onrender.com/api/usuario/guardar", {
-      const response = await fetch("http://localhost:8080/api/usuario/guardar", {
+      const response = await fetch("https://triviaback-latest.onrender.com/api/usuario/guardar", {
+      //const response = await fetch("http://localhost:8080/api/usuario/guardar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
