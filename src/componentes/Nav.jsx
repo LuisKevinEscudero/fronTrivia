@@ -86,37 +86,45 @@ const Nav = ({ onLoginSuccess }) => {
 
   return (
     <nav className="nav-bar">
-      {!userInfo ? (
-        <>
-          <button
-            className="boton-iniciar-sesion"
-            onClick={openLoginModal}
-          >
-            Iniciar Sesión
-          </button>
-          <button
-            className="boton-registrarse"
-            onClick={openRegisterModal} // Abre el modal de registro
-          >
-            Registrarse
-          </button>
-        </>
-      ) : (
-        <>
-          <span className="nombre-usuario">{userInfo.name}</span> {/* Mostramos el nombre del usuario */}
-          <button className="boton-cerrar-sesion" onClick={handleLogout}>
-            Cerrar Sesión
-          </button>
-        </>
-      )}
+      <div className="nav-izquierda">
+        <a
+          href="https://www.buymeacoffee.com/kevinEscudero"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="boton-donar"
+        >
+          <img
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+            alt="Buy Me A Coffee"
+          />
+        </a>
+      </div>
 
+      <div className="nav-derecha">
+        {!userInfo ? (
+          <>
+            <button className="boton-iniciar-sesion" onClick={openLoginModal}>
+              Iniciar Sesión
+            </button>
+            <button className="boton-registrarse" onClick={openRegisterModal}>
+              Registrarse
+            </button>
+          </>
+        ) : (
+          <>
+            <span className="nombre-usuario">{userInfo.name}</span>
+            <button className="boton-cerrar-sesion" onClick={handleLogout}>
+              Cerrar Sesión
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Modales */}
       {showLogin && (
         <div className="modal-overlay" onClick={handleCloseModals}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} >
-            <button
-              className="cerrar-modal"
-              onClick={handleCloseModals}
-            >
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="cerrar-modal" onClick={handleCloseModals}>
               ×
             </button>
             <IniciarSesion onLoginSuccess={handleLoginSuccess} onClose={handleCloseModals} />
@@ -127,10 +135,7 @@ const Nav = ({ onLoginSuccess }) => {
       {showRegister && (
         <div className="modal-overlay" onClick={handleCloseModals}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="cerrar-modal"
-              onClick={handleCloseModals}
-            >
+            <button className="cerrar-modal" onClick={handleCloseModals}>
               ×
             </button>
             <Registro onClose={handleCloseModals} />
@@ -138,6 +143,7 @@ const Nav = ({ onLoginSuccess }) => {
         </div>
       )}
     </nav>
+
   );
 };
 

@@ -1,18 +1,29 @@
 /* Contenedor principal */
 .contenedor-principal {
-  padding-top: 70px; /* Espacio entre el nav y el contenido principal */
+  padding-top: 70px;
   text-align: center;
 }
 
 /* Logo */
 .contenedor-logo {
-  margin-bottom: 20px; /* Espacio debajo del logo */
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
-  width: 150px; /* Tamaño del logo */
+  width: 180px;
   height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
 }
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
 
 /* Mensaje de bienvenida */
 .mensaje-bienvenida {

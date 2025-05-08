@@ -3,6 +3,8 @@ import "../css/PaginaPrincipal.css"; // Estilos de la página principal
 import Nav from "./Nav"; // Importamos el componente de navegación
 import Juego from "./Juego"; // Importamos el componente Juego
 import DetallePartida from "./DetallePartida"; // Importa el nuevo componente
+import logo from "../assets/logo.jpg";
+
 
 const PaginaPrincipal = () => {
   const [userInfo, setUserInfo] = useState(null); // Guardar la información del usuario
@@ -153,7 +155,7 @@ const PaginaPrincipal = () => {
       <div className="contenedor-principal">
         <div className="contenedor-logo">
           <img
-            src="https://via.placeholder.com/150"
+            src={logo}
             alt="Logo del juego"
             className="logo"
           />
