@@ -45,7 +45,8 @@ const PaginaPrincipal = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+          `https://triviaback-latest.onrender.com/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
+          //`http://localhost:8080/api/partida/obtenerPorNombreUsuario/${userInfo.name}`,
           {
             method: "GET",
             headers: {

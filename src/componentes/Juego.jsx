@@ -66,7 +66,8 @@ const Juego = ({ nombreUsuario, partida, reiniciarJuego }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
+        `https://triviaback-latest.onrender.com/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
+        //`http://localhost:8080/api/partida/responder/${partida.id}?preguntaId=${preguntaActual.id}&respuestaUsuario=${respuesta}&todasContestadas=${todasContestadas}`,
         {
           method: "POST",
           headers: {
